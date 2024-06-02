@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.api.domain.Customer;
 import com.example.api.service.CustomerService;
+import com.example.api.validator.RestEntityResponse;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,55 +16,81 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/customers")
 public class CustomerController {
 
+    @Autowired
     private CustomerService service;
 
-    @Autowired
-    public CustomerController(CustomerService service) {
-        this.service = service;
+    @GetMapping
+    public ResponseEntity<RestEntityResponse<List<Customer>>> findAll() {
+
+        RestEntityResponse<List<Customer>> response = service.findAll();
+
+        if (!response.isSuccess()) {
+
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping
-    public List<Customer> findAll(Pageable pageable) {
+    @GetMapping("pageable")
+    public List<Customer> findAllPageable(Pageable pageable) {
 
         Page<Customer> findAll = service.findAll(pageable);
         return findAll.getContent();
     }
 
     @GetMapping("{id}")
-    public Customer findById(@PathVariable Long id) {
-        return service.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+    public ResponseEntity<RestEntityResponse<Customer>> findById(@PathVariable Long id) {
+
+        RestEntityResponse<Customer> response = service.findById(id);
+
+        if (!response.isSuccess()) {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @PostMapping(value = "create")
-    public ResponseEntity<String> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<RestEntityResponse<Customer>> createCustomer(@RequestBody Customer customer) {
 
-        ResponseEntity<String> createdCustomer = service.createCustomer(customer);
+        RestEntityResponse<Customer> response = service.createCustomer(customer);
 
-        System.out.println(createdCustomer);
+        if (!response.isSuccess()) {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
-        return createdCustomer;
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
 
     }
 
     @PutMapping(value = "update/{id}")
-    public ResponseEntity<String> updateCustomer(
+    public ResponseEntity<RestEntityResponse<Customer>> updateCustomer(
             @PathVariable(name = "id") Long id,
             @RequestBody Customer customer) {
 
-        ResponseEntity<String> updatedCustomer = service.updateCustomer(id, customer);
+        RestEntityResponse<Customer> response = service.updateCustomer(id, customer);
 
-        System.out.println(updatedCustomer);
-
-        return updatedCustomer;
+        if (!response.isSuccess()) {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "delete/{id}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<RestEntityResponse<Customer>> deleteCustomer(
+            @PathVariable(name = "id") final Long id) {
 
-        ResponseEntity<String> responseEntity = service.deleteCustomer(id);
+        RestEntityResponse<Customer> response = service.deleteCustomer(id);
 
-        return responseEntity;
+        if (!response.isSuccess()) {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
