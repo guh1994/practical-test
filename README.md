@@ -21,6 +21,33 @@
 2. Digite `http://localhost:8080/customers/pageable?page=0&size=2` para encontrar os customers paginado.
 3. Digite `http://localhost:8080/customers/{id}` para encontrar o customer por id.
 4. Digite `http://localhost:8080/customers/create` para criar um customer.
+   Envie o json no seguinte formato.
+      ```json 
+            {    
+                "id": 0,
+                "name": "Roberto Santos",
+                "email": "robersantos@gmail.com",
+                "addresses":[
+                    {
+                    "id": 0,
+                    "street":"Rua da Joana",
+                    "district":"Jardim Botuquara",
+                    "city":"São Paulo",
+                    "zipcode":"01234-567",
+                    "states": "SP",
+                    "number":"99"
+                    },
+                    {
+                    "id": 0,
+                    "street":"Rua da Bruna",
+                    "district":"Jardim Nova Esperança",
+                    "city":"São Paulo",
+                    "zipcode":"76543-210",
+                    "states": "SP",
+                    "number":"458"
+                    }
+                  ]
+         }
 5. Digite `http://localhost:8080/customers/update/{id}` para atualizar um customer.
 6. Digite `http://localhost:8080/customers/delete/{id}`para deleter um customer.
    
