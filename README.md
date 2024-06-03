@@ -20,35 +20,62 @@
 1. Envie um GET para `http://localhost:8080/customers` para encontrar todos os customer sem paginação.
 2. Envie um GET para `http://localhost:8080/customers/pageable?page=0&size=2` para encontrar os customers paginado.
 3. Envie um GET para `http://localhost:8080/customers/{id}` para encontrar o customer por id.
-4. Envie um POST para `http://localhost:8080/customers/create` para criar um customer (Necessita de um body em json no formato listado no item 7).
-5. Envie um PUT para `http://localhost:8080/customers/update/{id}` para atualizar um customer (Necessita de um body em json no formato listado no item 7). 
-6. Envie um DELETE para `http://localhost:8080/customers/delete/{id}`para deleter um customer.
-7. Formato Json
+4. Envie um POST para `http://localhost:8080/customers` para criar um customer (Necessita de um body em json no formato listado no item 7).
+5. Envie um PUT para `http://localhost:8080/customers` para atualizar um customer (Necessita de um body em json no formato listado no item 7). 
+6. Envie um DELETE para `http://localhost:8080/customers/{id}`para deleter um customer.
+7. Formato Json para createCustomer
 Envie o json no seguinte formato.
       ```json 
-            {    
-                "id": 0,
-                "name": "Roberto Santos",
-                "email": "robersantos@gmail.com",
-                "addresses":[
-                    {
-                    "id": 0,
-                    "street":"Rua da Joana",
-                    "district":"Jardim Botuquara",
-                    "city":"São Paulo",
-                    "zipcode":"01234-567",
-                    "states": "SP",
-                    "number":"99"
-                    },
-                    {
-                    "id": 0,
-                    "street":"Rua da Bruna",
-                    "district":"Jardim Nova Esperança",
-                    "city":"São Paulo",
-                    "zipcode":"76543-210",
-                    "states": "SP",
-                    "number":"458"
-                    }
-                  ]
-            }
+            {
+    "name": "Roberto Santos",
+    "email": "robersantos@gmail.com",
+    "addresses": [
+        {
+            "street": "Rua da Joana",
+            "district": "Jardim Botuquara",
+            "city": "São Paulo",
+            "zipcode": "01234-567",
+            "addressState": "SP",
+            "number": "99"
+        },
+        {
+            "street": "Rua da Bruna",
+            "district": "Jardim Nova Esperança",
+            "city": "São Paulo",
+            "zipcode": "76543-210",
+            "addressState": "SP",
+            "number": "458"
+        }
+    ]
+}
+
+8. Formato Json para updateCustomer
+Envie o json no seguinte formato.
+      ```json
+      {
+    "id": 3,
+    "name": "Roberto Santos",
+    "email": "robersantos@gmail.com",
+    "addresses": [
+        {
+            "id": 1,
+            "street": "Rua da Joana",
+            "district": "Jardim Botuquara",
+            "city": "São Paulo",
+            "zipcode": "01234-567",
+            "addressState": "SP",
+            "number": "500"
+        },
+        {
+            "id": 2,
+            "street": "Rua da Bruna",
+            "district": "Jardim Nova Esperança",
+            "city": "São Paulo",
+            "zipcode": "76543-210",
+            "addressState": "SP",
+            "number": "501"
+        }
+    ]
+}
+
    
