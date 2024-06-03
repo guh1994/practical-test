@@ -32,7 +32,7 @@ import com.example.api.validator.RestEntityResponse;
 /**
  * @author Gustavo Silva
  */
-public class CustomerServiceImplTest
+public class CustomerServiceTest
 {
 
     @Rule
@@ -54,13 +54,10 @@ public class CustomerServiceImplTest
 
     @Mock
     private CustomerRepository repository;
-
     @Mock
     private Customer customer;
-
     @Mock
     private Customer updatedCustomer;
-
     @Mock
     private Pageable pageable;
 
@@ -95,13 +92,13 @@ public class CustomerServiceImplTest
     }
 
     @Test
-    public void shouldGetNullCustomer()
+    public void shouldGetEmptCustomers()
     {
         Mockito.when( repository.findAll() ).thenReturn( Collections.emptyList() );
 
         final RestEntityResponse<List<Customer>> response = subject.findAll();
 
-        Assert.assertNull( response.getEntity() );
+        Assert.assertTrue( response.getEntity().isEmpty() );
     }
 
     @Test
@@ -115,7 +112,14 @@ public class CustomerServiceImplTest
         Assert.assertEquals( ID, response.getEntity().getId() );
         Assert.assertEquals( NAME, response.getEntity().getName() );
         Assert.assertEquals( EMAIL, response.getEntity().getEmail() );
+    }
 
+    @Test
+    public void shouldGetErrorWhenFindCustomerByIdWithNullId()
+    {
+        final RestEntityResponse<Customer> response = subject.findById( null );
+        Assert.assertFalse( response.isSuccess() );
+        Assert.assertEquals( Arrays.asList( "Id is null" ), response.getMessages() );
     }
 
     @Test
@@ -131,7 +135,7 @@ public class CustomerServiceImplTest
     @Test
     public void shouldCreateCustomer()
     {
-        final RestEntityResponse<Customer> response = subject.createCustomer( customer );
+        final RestEntityResponse<Customer> response = subject.create( customer );
 
         Assert.assertNotNull( response.getEntity() );
         Assert.assertEquals( RestEntityResponse.<Customer> builder()
@@ -147,12 +151,7 @@ public class CustomerServiceImplTest
     {
         Mockito.when( repository.existsByEmail( EMAIL ) ).thenReturn( true );
 
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( customer.getName() );
-        customerTest.setEmail( customer.getEmail() );
-
-        final RestEntityResponse<Customer> response = subject.createCustomer( customerTest );
+        final RestEntityResponse<Customer> response = subject.create( customer );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer Already exists" ), response.getMessages() );
@@ -162,12 +161,8 @@ public class CustomerServiceImplTest
     @Test
     public void shouldReturnErrorMessageWhenCustomerNameIsNullWhenCreateCustomer()
     {
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( null );
-        customerTest.setEmail( customer.getEmail() );
-
-        final RestEntityResponse<Customer> response = subject.createCustomer( customerTest );
+        Mockito.when( customer.getName() ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.create( customer );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer name is empty" ), response.getMessages() );
@@ -177,12 +172,8 @@ public class CustomerServiceImplTest
     @Test
     public void shouldReturnErrorMessageWhenCustomerEmailIsNullWhenCreateCustomer()
     {
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( customer.getName() );
-        customerTest.setEmail( null );
-
-        final RestEntityResponse<Customer> response = subject.createCustomer( customerTest );
+        Mockito.when( customer.getEmail() ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.create( customer );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer email is empty" ), response.getMessages() );
@@ -192,11 +183,7 @@ public class CustomerServiceImplTest
     public void shouldReturnErrorMessageWhenCustomerIsNullWhenCreateCustomer()
     {
         final Customer customerTest = new Customer();
-        customerTest.setId( null );
-        customerTest.setName( null );
-        customerTest.setEmail( null );
-
-        final RestEntityResponse<Customer> response = subject.createCustomer( customerTest );
+        final RestEntityResponse<Customer> response = subject.create( customerTest );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer is null" ), response.getMessages() );
@@ -220,7 +207,7 @@ public class CustomerServiceImplTest
         Mockito.when( updatedCustomer.getAddresses() ).thenReturn( updatedCustomerTest.getAddresses() );
         Mockito.when( repository.existsById( ID ) ).thenReturn( true );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer(  updatedCustomerTest );
+        final RestEntityResponse<Customer> response = subject.update( updatedCustomerTest );
 
         Mockito.verify( customer ).update( updatedCustomerTest );
         Mockito.verify( repository ).save( customer );
@@ -234,14 +221,7 @@ public class CustomerServiceImplTest
     public void shouldValidateIfExistsCustomerBeforeUpdateCustomer()
     {
         Mockito.when( repository.existsById( ID ) ).thenReturn( true );
-
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( customer.getName() );
-        customerTest.setEmail( customer.getEmail() );
-        customerTest.setAddresses( customer.getAddresses() );
-
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
+        final RestEntityResponse<Customer> response = subject.update( customer );
 
         Assert.assertTrue( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer updated" ), response.getMessages() );
@@ -250,12 +230,8 @@ public class CustomerServiceImplTest
     @Test
     public void shouldReturnErrorMessageWhenCustomerNameIsNullWhenUpdateCustomer()
     {
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( null );
-        customerTest.setEmail( customer.getEmail() );
-
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
+        Mockito.when( customer.getName() ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.update( customer );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer name is empty" ), response.getMessages() );
@@ -264,56 +240,62 @@ public class CustomerServiceImplTest
     @Test
     public void shouldReturnErrorMessageWhenCustomerEmailIsNullWhenUpdateCustomer()
     {
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( customer.getName() );
-        customerTest.setEmail( null );
-
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
+        Mockito.when( customer.getEmail() ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.update( customer );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer email is empty" ), response.getMessages() );
     }
 
     @Test
-    public void shouldReturnErrorMessageWhenCustomerIsNullWhenUpdateCustomer()
+    public void shouldReturnErrorMessageWhenCustomerIdIsNullWhenUpdateCustomer()
     {
         final Customer customerTest = new Customer();
-        customerTest.setId( null );
-        customerTest.setName( null );
-        customerTest.setEmail( null );
-
-        final RestEntityResponse<Customer> response = subject.updateCustomer(  customerTest );
+        final RestEntityResponse<Customer> response = subject.update( customerTest );
 
         Assert.assertFalse( response.isSuccess() );
-        Assert.assertEquals( Arrays.asList( "Customer is null" ), response.getMessages() );
+        Assert.assertTrue( response.getMessages().contains( "Customer id is null" ) );
+    }
+
+    @Test
+    public void shouldReturnErrorMessageWhenCustomerNotFoundWhenUpdateCustomer()
+    {
+        Mockito.when( repository.findCustomerById( customer.getId() ) ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.update( customer );
+
+        Assert.assertFalse( response.isSuccess() );
+        Assert.assertTrue( response.getMessages().contains( "Customer not found" ) );
     }
 
     @Test
     public void shouldReturnErrorMessageWhenCustomerAddressIsNullWhenUpdateCustomer()
     {
-         Customer customerTest = new Customer();
-         customerTest.setId(customer.getId());
-         customerTest.setName(customer.getName());
-         customerTest.setEmail(customer.getEmail());
-         customerTest.setAddresses(null);
-        
-         RestEntityResponse<Customer> response
-         = subject.updateCustomer( customerTest);
-        
-         Assert.assertFalse(response.isSuccess());
-         Assert.assertEquals(Arrays.asList("Address is Null"),
-         response.getMessages());
+
+        Mockito.when( customer.getAddresses() ).thenReturn( null );
+        final RestEntityResponse<Customer> response = subject.update( customer );
+
+        Assert.assertFalse( response.isSuccess() );
+        Assert.assertEquals( Arrays.asList( "Address is Null" ),
+            response.getMessages() );
+    }
+
+    @Test
+    public void shouldReturnErrorMessageWhenUpdateCustomerEmailWithExistentEmailUsedByOtherCustomer()
+    {
+        final Customer existentCustomer = Mockito.mock( Customer.class );
+        Mockito.when( existentCustomer.getId() ).thenReturn( 123L );
+        Mockito.when( repository.findByEmail( EMAIL ) ).thenReturn( existentCustomer );
+
+        final RestEntityResponse<Customer> response = subject.update( customer );
+
+        Assert.assertFalse( response.isSuccess() );
+        Assert.assertEquals( Arrays.asList( "Customer Already exists with provided email" ),
+            response.getMessages() );
     }
 
     @Test
     public void shouldDeleteCustomer()
     {
-
-        final Customer customerTest = new Customer();
-        customerTest.setId( customer.getId() );
-        customerTest.setName( customer.getName() );
-        customerTest.setEmail( customer.getEmail() );
 
         final RestEntityResponse<Customer> response = subject.deleteCustomer( ID );
 
@@ -325,10 +307,8 @@ public class CustomerServiceImplTest
     @Test
     public void shouldErrorMessageIfCustomerNotExists()
     {
-        final Customer customerTest = new Customer();
-        customerTest.setId( 52L );
 
-        final RestEntityResponse<Customer> response = subject.deleteCustomer( customerTest.getId() );
+        final RestEntityResponse<Customer> response = subject.deleteCustomer( 52L );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer is not existis so that can't be no deleted" ), response.getMessages() );
@@ -339,8 +319,6 @@ public class CustomerServiceImplTest
     {
 
         final Customer customerTest = new Customer();
-        customerTest.setId( null );
-
         final RestEntityResponse<Customer> response = subject.deleteCustomer( customerTest.getId() );
 
         Assert.assertFalse( response.isSuccess() );

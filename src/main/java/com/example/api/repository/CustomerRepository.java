@@ -18,4 +18,7 @@ public interface CustomerRepository
 
     Customer findCustomerById(
         Long id );
+    
+    Customer findByEmail(
+        String email );
 }

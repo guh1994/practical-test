@@ -31,15 +31,7 @@ public class CustomerController
     @GetMapping
     public ResponseEntity<RestEntityResponse<List<Customer>>> findAll()
     {
-
         final RestEntityResponse<List<Customer>> response = service.findAll();
-
-        if( ! response.isSuccess() ) {
-
-            return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
-
-        }
-
         return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
@@ -47,7 +39,6 @@ public class CustomerController
     public List<Customer> findAllPageable(
         final Pageable pageable )
     {
-
         final Page<Customer> findAll = service.findAll( pageable );
         return findAll.getContent();
     }
@@ -56,28 +47,21 @@ public class CustomerController
     public ResponseEntity<RestEntityResponse<Customer>> findById(
         @PathVariable final Long id )
     {
-
         final RestEntityResponse<Customer> response = service.findById( id );
-
         if( ! response.isSuccess() ) {
             return new ResponseEntity<>( response, HttpStatus.NOT_FOUND );
-
         }
         return new ResponseEntity<>( response, HttpStatus.OK );
-
     }
 
     @PostMapping
     public ResponseEntity<RestEntityResponse<Customer>> createCustomer(
         @RequestBody final Customer customer )
     {
-
-        final RestEntityResponse<Customer> response = service.createCustomer( customer );
-
+        final RestEntityResponse<Customer> response = service.create( customer );
         if( ! response.isSuccess() ) {
             return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
         }
-
         return new ResponseEntity<>( response, HttpStatus.CREATED );
 
     }
@@ -86,9 +70,7 @@ public class CustomerController
     public ResponseEntity<RestEntityResponse<Customer>> updateCustomer(
         @RequestBody final Customer customer )
     {
-
-        final RestEntityResponse<Customer> response = service.updateCustomer( customer );
-
+        final RestEntityResponse<Customer> response = service.update( customer );
         if( ! response.isSuccess() ) {
             return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
         }
@@ -99,14 +81,10 @@ public class CustomerController
     public ResponseEntity<RestEntityResponse<Customer>> deleteCustomer(
         @PathVariable( name = "id" ) final Long id )
     {
-
         final RestEntityResponse<Customer> response = service.deleteCustomer( id );
-
         if( ! response.isSuccess() ) {
             return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
-
         }
-
         return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
