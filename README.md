@@ -23,7 +23,7 @@
 4. Envie um POST para `http://localhost:8080/customers` para criar um customer (Necessita de um body em json no formato listado no item 7).
 5. Envie um PUT para `http://localhost:8080/customers` para atualizar um customer (Necessita de um body em json no formato listado no item 7). 
 6. Envie um DELETE para `http://localhost:8080/customers/{id}`para deleter um customer.
-7. Formato Json para createCustomer
+7. Formato Json para Criar Customer
 Envie o json no seguinte formato.
       ```json 
             {
@@ -47,9 +47,9 @@ Envie o json no seguinte formato.
             "number": "458"
         }
     ]
-}
+   }
 
-8. Formato Json para updateCustomer
+9. Formato Json para Atualizar
 Envie o json no seguinte formato.
       ```json
       {
@@ -76,6 +76,6 @@ Envie o json no seguinte formato.
             "number": "501"
         }
     ]
-}
+   }
 
    
