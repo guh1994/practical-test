@@ -17,11 +17,14 @@
 2. Digite `http://localhost:8080/swagger-ui/index.html`
 
 ### Requisições
-1. Digite `http://localhost:8080/customers` para encontrar todos os customer sem paginação.
-2. Digite `http://localhost:8080/customers/pageable?page=0&size=2` para encontrar os customers paginado.
-3. Digite `http://localhost:8080/customers/{id}` para encontrar o customer por id.
-4. Digite `http://localhost:8080/customers/create` para criar um customer.
-   Envie o json no seguinte formato.
+1. Envie um GET para `http://localhost:8080/customers` para encontrar todos os customer sem paginação.
+2. Envie um GET para `http://localhost:8080/customers/pageable?page=0&size=2` para encontrar os customers paginado.
+3. Envie um GET para `http://localhost:8080/customers/{id}` para encontrar o customer por id.
+4. Envie um POST para `http://localhost:8080/customers/create` para criar um customer (Necessita de um body em json no formato listado no item 7).
+5. Envie um PUT para `http://localhost:8080/customers/update/{id}` para atualizar um customer (Necessita de um body em json no formato listado no item 7). 
+6. Envie um DELETE para `http://localhost:8080/customers/delete/{id}`para deleter um customer.
+7. Formato Json
+Envie o json no seguinte formato.
       ```json 
             {    
                 "id": 0,
@@ -47,7 +50,5 @@
                     "number":"458"
                     }
                   ]
-         }
-5. Digite `http://localhost:8080/customers/update/{id}` para atualizar um customer.
-6. Digite `http://localhost:8080/customers/delete/{id}`para deleter um customer.
+            }
    
