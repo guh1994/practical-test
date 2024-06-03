@@ -12,4 +12,15 @@
 1. Acesse: `http://localhost:8080/customers`
 
 
+### Documentação
+1. Rode a aplicação
+2. Digite `http://localhost:8080/swagger-ui/index.html`
 
+### Requisições
+1. Digite `http://localhost:8080/customers` para encontrar todos os customer sem paginação.
+2. Digite `http://localhost:8080/customers/pageable?page=0&size=2` para encontrar os customers paginado.
+3. Digite `http://localhost:8080/customers/{id}` para encontrar o customer por id.
+4. Digite `http://localhost:8080/customers/create` para criar um customer.
+5. Digite `http://localhost:8080/customers/update/{id}` para atualizar um customer.
+6. Digite `http://localhost:8080/customers/delete/{id}`para deleter um customer.
+   
