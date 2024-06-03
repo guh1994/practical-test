@@ -67,7 +67,7 @@ public class CustomerController
 
     }
 
-    @PostMapping( value = "create" )
+    @PostMapping
     public ResponseEntity<RestEntityResponse<Customer>> createCustomer(
         @RequestBody final Customer customer )
     {
@@ -82,13 +82,12 @@ public class CustomerController
 
     }
 
-    @PutMapping( value = "update/{id}" )
+    @PutMapping
     public ResponseEntity<RestEntityResponse<Customer>> updateCustomer(
-        @PathVariable( name = "id" ) final Long id,
         @RequestBody final Customer customer )
     {
 
-        final RestEntityResponse<Customer> response = service.updateCustomer( id, customer );
+        final RestEntityResponse<Customer> response = service.updateCustomer( customer );
 
         if( ! response.isSuccess() ) {
             return new ResponseEntity<>( response, HttpStatus.BAD_REQUEST );
@@ -96,7 +95,7 @@ public class CustomerController
         return new ResponseEntity<>( response, HttpStatus.OK );
     }
 
-    @DeleteMapping( value = "delete/{id}" )
+    @DeleteMapping( value = "{id}" )
     public ResponseEntity<RestEntityResponse<Customer>> deleteCustomer(
         @PathVariable( name = "id" ) final Long id )
     {

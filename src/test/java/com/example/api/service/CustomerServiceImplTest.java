@@ -220,7 +220,7 @@ public class CustomerServiceImplTest
         Mockito.when( updatedCustomer.getAddresses() ).thenReturn( updatedCustomerTest.getAddresses() );
         Mockito.when( repository.existsById( ID ) ).thenReturn( true );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer( updatedCustomer.getId(), updatedCustomerTest );
+        final RestEntityResponse<Customer> response = subject.updateCustomer(  updatedCustomerTest );
 
         Mockito.verify( customer ).update( updatedCustomerTest );
         Mockito.verify( repository ).save( customer );
@@ -241,7 +241,7 @@ public class CustomerServiceImplTest
         customerTest.setEmail( customer.getEmail() );
         customerTest.setAddresses( customer.getAddresses() );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customer.getId(), customerTest );
+        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
 
         Assert.assertTrue( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer updated" ), response.getMessages() );
@@ -255,7 +255,7 @@ public class CustomerServiceImplTest
         customerTest.setName( null );
         customerTest.setEmail( customer.getEmail() );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest.getId(), customerTest );
+        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer name is empty" ), response.getMessages() );
@@ -269,7 +269,7 @@ public class CustomerServiceImplTest
         customerTest.setName( customer.getName() );
         customerTest.setEmail( null );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest.getId(), customerTest );
+        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer email is empty" ), response.getMessages() );
@@ -283,7 +283,7 @@ public class CustomerServiceImplTest
         customerTest.setName( null );
         customerTest.setEmail( null );
 
-        final RestEntityResponse<Customer> response = subject.updateCustomer( customerTest.getId(), customerTest );
+        final RestEntityResponse<Customer> response = subject.updateCustomer(  customerTest );
 
         Assert.assertFalse( response.isSuccess() );
         Assert.assertEquals( Arrays.asList( "Customer is null" ), response.getMessages() );
@@ -292,18 +292,18 @@ public class CustomerServiceImplTest
     @Test
     public void shouldReturnErrorMessageWhenCustomerAddressIsNullWhenUpdateCustomer()
     {
-        // Customer customerTest = new Customer();
-        // customerTest.setId(customer.getId());
-        // customerTest.setName(customer.getName());
-        // customerTest.setEmail(customer.getEmail());
-        // customerTest.setAddresses(null);
-        //
-        // RestEntityResponse<Customer> response
-        // = subject.updateCustomer(customerTest.getId(), customerTest);
-        //
-        // Assert.assertFalse(response.isSuccess());
-        // Assert.assertEquals(Arrays.asList("Address is Null"),
-        // response.getMessages());
+         Customer customerTest = new Customer();
+         customerTest.setId(customer.getId());
+         customerTest.setName(customer.getName());
+         customerTest.setEmail(customer.getEmail());
+         customerTest.setAddresses(null);
+        
+         RestEntityResponse<Customer> response
+         = subject.updateCustomer( customerTest);
+        
+         Assert.assertFalse(response.isSuccess());
+         Assert.assertEquals(Arrays.asList("Address is Null"),
+         response.getMessages());
     }
 
     @Test

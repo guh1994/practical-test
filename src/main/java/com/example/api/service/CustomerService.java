@@ -13,9 +13,6 @@ import org.springframework.util.StringUtils;
 
 import com.example.api.domain.Address;
 import com.example.api.domain.Customer;
-import com.example.api.exceptions.CreateCustomerException;
-import com.example.api.exceptions.DeletionException;
-import com.example.api.exceptions.UpdateCustomerException;
 import com.example.api.repository.AddressRepository;
 import com.example.api.repository.CustomerRepository;
 import com.example.api.validator.RestEntityResponse;
@@ -87,8 +84,6 @@ public class CustomerService
         final Customer customer )
     {
 
-        try {
-
             final List<String> validate = validateCustomer( customer );
 
             if( ! validate.isEmpty() ) {
@@ -120,23 +115,12 @@ public class CustomerService
                 .messages( Arrays.asList( "Customer created" ) )
                 .entity( customerCreated )
                 .build();
-        } catch( final CreateCustomerException e ) {
-
-            System.out.println( "[CreateCustomer] Exception: " + e );
-
-            return RestEntityResponse.<Customer> builder()
-                .success( false )
-                .messages( Arrays.asList( "Customer can't be created because someone is wrong" ) )
-                .build();
-        }
+        
     }
 
     public RestEntityResponse<Customer> updateCustomer(
-        final Long id,
         final Customer customer )
     {
-
-        try {
 
             final List<String> validate = validateCustomer( customer );
             if( ! validate.isEmpty() ) {
@@ -148,7 +132,7 @@ public class CustomerService
                     .build();
             }
 
-            final Customer customerById = repository.findCustomerById( id );
+            final Customer customerById = repository.findCustomerById( customer.getId() );
             if( customerById == null ) {
 
                 return RestEntityResponse.<Customer> builder()
@@ -174,24 +158,13 @@ public class CustomerService
                 .messages( Arrays.asList( "Customer updated" ) )
                 .entity( customerUpdated )
                 .build();
-
-        } catch( final UpdateCustomerException uce ) {
-
-            System.out.println( "[UpdateCustomer] [Exception]: " + uce );
-
-            return RestEntityResponse.<Customer> builder()
-                .success( false )
-                .messages( Arrays.asList( "Customer can't be updated because something is wrong" ) )
-                .entity( null )
-                .build();
-        }
+ 
     }
 
     public RestEntityResponse<Customer> deleteCustomer(
         final Long id )
     {
 
-        try {
             if( id == null ) {
 
                 return RestEntityResponse.<Customer> builder()
@@ -215,14 +188,6 @@ public class CustomerService
                 .success( true )
                 .messages( Arrays.asList( "Customer deleted with success" ) )
                 .build();
-        } catch( final DeletionException de ) {
-            System.out.println( "[DeleteCustomer] [Exception]: " + de );
-
-            return RestEntityResponse.<Customer> builder()
-                .success( false )
-                .messages( Arrays.asList( "Customer can't be deleted becaus something is wrong" ) )
-                .build();
-        }
     }
 
     private List<String> validateCustomer(
