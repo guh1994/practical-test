@@ -65,4 +65,10 @@ public class Customer {
         this.address = address;
     }
 
+    public void update(
+            final Customer customer) {
+        this.name = customer.name;
+        this.email = customer.email;
+    }
+
 }

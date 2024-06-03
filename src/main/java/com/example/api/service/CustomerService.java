@@ -133,7 +133,11 @@ public class CustomerService {
                         .entity(null)
                         .build();
             }
-            Customer customerUpdated = repository.save(customer);
+
+            
+            customerById.update(customer);
+
+            Customer customerUpdated = repository.save(customerById);
 
             return RestEntityResponse.<Customer>builder()
                     .success(true)
