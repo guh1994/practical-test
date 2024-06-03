@@ -1,11 +1,10 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package com.example.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,16 +15,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 /**
- *
  * @author Gustavo Silva
  */
 @Entity
-public class Address {
+public class Address
+{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_sequence_genarator")
-    @SequenceGenerator(name = "address_sequence_genarator", sequenceName = "ADDRESS_SEQUENCE", allocationSize = 1, initialValue = 1)
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "address_sequence_genarator" )
+    @SequenceGenerator( name = "address_sequence_genarator", sequenceName = "ADDRESS_SEQUENCE", allocationSize = 1, initialValue = 1 )
     private Long id;
 
     private String street;
@@ -40,15 +41,24 @@ public class Address {
 
     private String number;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @JoinColumn( name = "customer_id" )
     @JsonBackReference
     private Customer customer;
 
-    protected Address() {
+    protected Address()
+    {
     }
 
-    public Address(Long id, String street, String district, String city, String zipcode, String addressState, String number) {
+    public Address(
+        final Long id,
+        final String street,
+        final String district,
+        final String city,
+        final String zipcode,
+        final String addressState,
+        final String number )
+    {
         this.id = id;
         this.street = street;
         this.district = district;
@@ -58,67 +68,91 @@ public class Address {
         this.number = number;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(
+        final Long id )
+    {
         this.id = id;
     }
 
-    public String getStreet() {
+    public String getStreet()
+    {
         return street;
     }
 
-    public void setStreet(String street) {
+    public void setStreet(
+        final String street )
+    {
         this.street = street;
     }
 
-    public String getDistrict() {
+    public String getDistrict()
+    {
         return district;
     }
 
-    public void setDistrict(String district) {
+    public void setDistrict(
+        final String district )
+    {
         this.district = district;
     }
 
-    public String getCity() {
+    public String getCity()
+    {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(
+        final String city )
+    {
         this.city = city;
     }
 
-    public String getZipcode() {
+    public String getZipcode()
+    {
         return zipcode;
     }
 
-    public void setZipcode(String zipcode) {
+    public void setZipcode(
+        final String zipcode )
+    {
         this.zipcode = zipcode;
     }
 
-    public String getNumber() {
+    public String getNumber()
+    {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(
+        final String number )
+    {
         this.number = number;
     }
 
-    public String getAddressState() {
+    public String getAddressState()
+    {
         return addressState;
     }
 
-    public void setAddressState(String addressState) {
+    public void setAddressState(
+        final String addressState )
+    {
         this.addressState = addressState;
     }
 
-    public Customer getCustomer() {
+    public Customer getCustomer()
+    {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(
+        final Customer customer )
+    {
         this.customer = customer;
     }
 
