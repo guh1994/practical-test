@@ -5,15 +5,11 @@
  */
 package com.example.api.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.SequenceGenerator;
 
 /**
  *
@@ -23,36 +19,24 @@ import javax.validation.constraints.NotEmpty;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_sequence_genarator")
+    @SequenceGenerator(name = "address_sequence_genarator", sequenceName = "ADDRESS_SEQUENCE", allocationSize = 1, initialValue = 1)
     private Long id;
 
-    @Column(nullable = false)
-    @NotEmpty
     private String street;
 
-    @Column(nullable = false)
-    @NotEmpty
     private String district;
 
-    @Column(nullable = false)
-    @NotEmpty
     private String city;
 
-    @Column(nullable = false)
-    @NotEmpty
     private String zipcode;
 
-    @Column(nullable = false)
-    @NotEmpty
-    private String states;
+    private String addressState;
 
-    @Column(nullable = false)
-    @NotEmpty
     private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    protected Address() {
+    }
 
     public Long getId() {
         return id;
@@ -94,14 +78,6 @@ public class Address {
         this.zipcode = zipcode;
     }
 
-    public String getState() {
-        return states;
-    }
-
-    public void setState(String states) {
-        this.states = states;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -110,12 +86,12 @@ public class Address {
         this.number = number;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public String getAddressState() {
+        return addressState;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setAddressState(String addressState) {
+        this.addressState = addressState;
     }
 
 }

@@ -26,7 +26,7 @@ public class CustomerService {
     private CustomerRepository repository;
 
     @Autowired
-    private AddressRepository repositorAddress;
+    AddressRepository addressRepository;
 
     public Page<Customer> findAll(Pageable pageable) {
 
@@ -97,11 +97,12 @@ public class CustomerService {
                         .build();
             }
 
-            repository.saveAndFlush(customer);
+            Customer customerCreated = repository.save(customer);
+
             return RestEntityResponse.<Customer>builder()
                     .success(true)
                     .messages(Arrays.asList("Customer created"))
-                    .entity(customer)
+                    .entity(customerCreated)
                     .build();
         } catch (CreateCustomerException e) {
 
