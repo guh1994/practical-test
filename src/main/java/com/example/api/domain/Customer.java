@@ -7,7 +7,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Email;
 
@@ -24,7 +25,7 @@ public class Customer {
     @Email
     private String email;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,targetEntity = Address.class)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
     public Long getId() {

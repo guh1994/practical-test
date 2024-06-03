@@ -6,9 +6,12 @@
 package com.example.api.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -34,6 +37,10 @@ public class Address {
     private String addressState;
 
     private String number;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     protected Address() {
     }
@@ -92,6 +99,14 @@ public class Address {
 
     public void setAddressState(String addressState) {
         this.addressState = addressState;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
 }
