@@ -61,6 +61,7 @@ public class CustomerServiceImplTest {
         Mockito.when(repository.findCustomerById(ID)).thenReturn(customer);
         Mockito.when(repository.findById(ID)).thenReturn(Optional.of(customer));
         Mockito.when(repository.save(any())).thenReturn(customer);
+        Mockito.when(repository.saveAndFlush(any())).thenReturn(customer);
         Mockito.when(repository.findAll()).thenReturn(Arrays.asList(customer));
     }
 

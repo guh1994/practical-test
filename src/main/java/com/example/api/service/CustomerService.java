@@ -10,6 +10,7 @@ import com.example.api.domain.Customer;
 import com.example.api.exceptions.CreateCustomerException;
 import com.example.api.exceptions.DeletionException;
 import com.example.api.exceptions.UpdateCustomerException;
+import com.example.api.repository.AddressRepository;
 import com.example.api.repository.CustomerRepository;
 import com.example.api.validator.RestEntityResponse;
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository repository;
+
+    @Autowired
+    private AddressRepository repositorAddress;
 
     public Page<Customer> findAll(Pageable pageable) {
 
@@ -93,7 +97,7 @@ public class CustomerService {
                         .build();
             }
 
-            repository.save(customer);
+            repository.saveAndFlush(customer);
             return RestEntityResponse.<Customer>builder()
                     .success(true)
                     .messages(Arrays.asList("Customer created"))
@@ -134,7 +138,6 @@ public class CustomerService {
                         .build();
             }
 
-            
             customerById.update(customer);
 
             Customer customerUpdated = repository.save(customerById);
@@ -211,4 +214,5 @@ public class CustomerService {
         }
         return messages;
     }
+
 }
