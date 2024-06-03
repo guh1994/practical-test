@@ -5,6 +5,8 @@
  */
 package com.example.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,11 +40,22 @@ public class Address {
 
     private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
     protected Address() {
+    }
+
+    public Address(Long id, String street, String district, String city, String zipcode, String addressState, String number) {
+        this.id = id;
+        this.street = street;
+        this.district = district;
+        this.city = city;
+        this.zipcode = zipcode;
+        this.addressState = addressState;
+        this.number = number;
     }
 
     public Long getId() {

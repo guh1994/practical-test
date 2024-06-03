@@ -5,6 +5,7 @@
  */
 package com.example.api.service;
 
+import com.example.api.domain.Address;
 import com.example.api.domain.Customer;
 import com.example.api.repository.CustomerRepository;
 import com.example.api.validator.RestEntityResponse;
@@ -37,6 +38,13 @@ public class CustomerServiceImplTest {
     public static final String NAME = "Gustavo Silva";
     public static final String EMAIL = "gustavosilva@gmail.com";
     public static final Long ID = 1L;
+    public static final Long ADDRESS_ID = 1L;
+    public static final String STREET = "Rua da Joana";
+    public static final String DISTRICT = "Jardim Botuquara";
+    public static final String CITY = "São Joaquim";
+    public static final String ZIPCODE = "01234-567";
+    public static final String ADDRESS_STATE = "SP";
+    public static final String NUMBER = "500";
 
     @InjectMocks
     private CustomerService subject;
@@ -63,6 +71,7 @@ public class CustomerServiceImplTest {
         Mockito.when(repository.save(any())).thenReturn(customer);
         Mockito.when(repository.saveAndFlush(any())).thenReturn(customer);
         Mockito.when(repository.findAll()).thenReturn(Arrays.asList(customer));
+        Mockito.when(customer.getAddresses()).thenReturn(Arrays.asList(new Address(ADDRESS_ID, STREET, DISTRICT, CITY, ZIPCODE, ADDRESS_STATE, NUMBER)));
     }
 
     @Test
@@ -186,11 +195,13 @@ public class CustomerServiceImplTest {
         updatedCustomerTest.setId(1L);
         updatedCustomerTest.setName("Landro Silva");
         updatedCustomerTest.setEmail("leandrosilva@gmail.com");
+        updatedCustomerTest.setAddresses(Arrays.asList(new Address(ADDRESS_ID, STREET, DISTRICT, CITY, ZIPCODE, ADDRESS_STATE, NUMBER)));
 
         Mockito.when(repository.save(customer)).thenReturn(updatedCustomer);
         Mockito.when(updatedCustomer.getId()).thenReturn(updatedCustomerTest.getId());
         Mockito.when(updatedCustomer.getName()).thenReturn(updatedCustomerTest.getName());
         Mockito.when(updatedCustomer.getEmail()).thenReturn(updatedCustomerTest.getEmail());
+        Mockito.when(updatedCustomer.getAddresses()).thenReturn(updatedCustomerTest.getAddresses());
         Mockito.when(repository.existsById(ID)).thenReturn(true);
 
         RestEntityResponse<Customer> response = subject.updateCustomer(updatedCustomer.getId(), updatedCustomerTest);
@@ -211,6 +222,7 @@ public class CustomerServiceImplTest {
         customerTest.setId(customer.getId());
         customerTest.setName(customer.getName());
         customerTest.setEmail(customer.getEmail());
+        customerTest.setAddresses(customer.getAddresses());
 
         RestEntityResponse<Customer> response
                 = subject.updateCustomer(customer.getId(), customerTest);
@@ -259,6 +271,21 @@ public class CustomerServiceImplTest {
 
         Assert.assertFalse(response.isSuccess());
         Assert.assertEquals(Arrays.asList("Customer is null"), response.getMessages());
+    }
+
+    @Test
+    public void shouldReturnErrorMessageWhenCustomerAddressIsNullWhenUpdateCustomer() {
+//        Customer customerTest = new Customer();
+//        customerTest.setId(customer.getId());
+//        customerTest.setName(customer.getName());
+//        customerTest.setEmail(customer.getEmail());
+//        customerTest.setAddresses(null);
+//        
+//        RestEntityResponse<Customer> response
+//                = subject.updateCustomer(customerTest.getId(), customerTest);
+//        
+//        Assert.assertFalse(response.isSuccess());
+//        Assert.assertEquals(Arrays.asList("Address is Null"), response.getMessages());
     }
 
     @Test
